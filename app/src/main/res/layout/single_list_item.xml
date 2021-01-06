@@ -65,8 +65,8 @@
                     android:src="@drawable/delete_bin"
                     android:layout_gravity="center_vertical"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginRight="7dp"/>
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"/>
             </RelativeLayout>
         </LinearLayout>
 
