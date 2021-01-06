@@ -1,5 +1,6 @@
 package com.example.voice_recorder.fragments;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -7,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.voice_recorder.MainActivity;
 import com.example.voice_recorder.R;
 import com.example.voice_recorder.adapters.AudioList_Adapter;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -27,6 +30,7 @@ import java.io.IOException;
 
 
 public class AudioList_Fragment extends Fragment implements AudioList_Adapter.onItemListClick {
+    private static final String TAG = "AudioList_Fragment";
 
     private ConstraintLayout playerSheet;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -39,6 +43,8 @@ public class AudioList_Fragment extends Fragment implements AudioList_Adapter.on
     private MediaPlayer mediaPlayer = null;
     private boolean isPlaying = false;
 
+    private MainActivity mainActivity;
+
     private File filetoPlay = null;
 
     private TextView player_filename, player_header_title;
@@ -47,13 +53,19 @@ public class AudioList_Fragment extends Fragment implements AudioList_Adapter.on
     private SeekBar player_seekbar;
     private Handler seekbarHandler;
     private Runnable updateSeekbar;
-    private int seekForwardTime = 2 * 1000; // default 5 second
-    private int seekBackwardTime = 2 * 1000; // default 5 second
+    private int seekForwardTime = 2 * 1000;
+    private int seekBackwardTime = 2 * 1000;
 
 
 
-    public AudioList_Fragment() {
-        // Required empty public constructor
+    public AudioList_Fragment() { super(); }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+            mainActivity = (MainActivity) context;
+        }
     }
 
     @Override
@@ -178,6 +190,15 @@ public class AudioList_Fragment extends Fragment implements AudioList_Adapter.on
         }
     }
 
+    @Override
+    public void onDeleteClickListener(File file, int position) {
+        File filetoPlay = file;
+        if (filetoPlay.exists()) {
+            filetoPlay.delete();
+            this.getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+
+        }
+    }
     private void pauseAudio() {
         mediaPlayer.pause();
         player_play_btn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play, null));
@@ -237,7 +258,7 @@ public class AudioList_Fragment extends Fragment implements AudioList_Adapter.on
             @Override
             public void run() {
                 player_seekbar.setProgress(mediaPlayer.getCurrentPosition());
-                seekbarHandler.postDelayed(this, 300); //500
+                seekbarHandler.postDelayed(this, 300);
             }
         };
     }

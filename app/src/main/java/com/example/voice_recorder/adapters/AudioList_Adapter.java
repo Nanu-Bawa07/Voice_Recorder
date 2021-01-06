@@ -46,7 +46,7 @@ public class AudioList_Adapter extends RecyclerView.Adapter<AudioList_Adapter.Au
 
     public class AudioViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView list_image;
+        private ImageView list_image, btn_delete;
         private TextView list_title;
         private TextView list_date;
 
@@ -56,17 +56,28 @@ public class AudioList_Adapter extends RecyclerView.Adapter<AudioList_Adapter.Au
             list_image = itemView.findViewById(R.id.list_image_view);
             list_title = itemView.findViewById(R.id.list_title);
             list_date = itemView.findViewById(R.id.list_date);
+            btn_delete = itemView.findViewById(R.id.btn_delete);
 
-            itemView.setOnClickListener(this);
+            list_image.setOnClickListener(this);
+            btn_delete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            onItemListClick.onClickListener(allFiles[getAdapterPosition()], getAdapterPosition());
+            switch (view.getId()) {
+                case R.id.list_image_view:
+                    onItemListClick.onClickListener(allFiles[getAdapterPosition()], getAdapterPosition());
+                    break;
+                case R.id.btn_delete:
+                    onItemListClick.onDeleteClickListener(allFiles[getAdapterPosition()], getAdapterPosition());
+                    break;
+            }
+
         }
     }
 
     public interface onItemListClick {
         void onClickListener(File file, int position);
+        void onDeleteClickListener(File file, int position);
     }
 }
