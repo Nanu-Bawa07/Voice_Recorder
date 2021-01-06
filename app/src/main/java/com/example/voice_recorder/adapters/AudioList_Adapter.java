@@ -78,6 +78,6 @@ public class AudioList_Adapter extends RecyclerView.Adapter<AudioList_Adapter.Au
 
     public interface onItemListClick {
         void onClickListener(File file, int position);
-        void onDeleteClickListener(File file, int position);
+        void onDeleteClickListener(File file, int position); // delete Click listener
     }
 }
