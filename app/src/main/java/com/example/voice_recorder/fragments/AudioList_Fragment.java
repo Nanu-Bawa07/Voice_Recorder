@@ -53,8 +53,8 @@ public class AudioList_Fragment extends Fragment implements AudioList_Adapter.on
     private SeekBar player_seekbar;
     private Handler seekbarHandler;
     private Runnable updateSeekbar;
-    private int seekForwardTime = 2 * 1000;
-    private int seekBackwardTime = 2 * 1000;
+    private int seekForwardTime = 2 * 1000; // 2 seconds forward
+    private int seekBackwardTime = 2 * 1000; // 2 seconds delayed
 
 
 
@@ -195,7 +195,7 @@ public class AudioList_Fragment extends Fragment implements AudioList_Adapter.on
         File filetoPlay = file;
         if (filetoPlay.exists()) {
             filetoPlay.delete();
-            this.getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            this.getFragmentManager().beginTransaction().detach(this).attach(this).commit(); // calling fragment again
 
         }
     }
