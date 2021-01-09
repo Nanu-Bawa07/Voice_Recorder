@@ -4,8 +4,10 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,6 +20,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +46,7 @@ public class Record_Fragment extends Fragment implements View.OnClickListener{
 
     private String recordPermission = Manifest.permission.RECORD_AUDIO;
     private int PERMISSION_CODE = 123;
+    private static final int REQUEST_APP_SETTINGS = 100;
 
     private MediaRecorder mediaRecorder;
     private String recordFile;
@@ -158,6 +162,13 @@ public class Record_Fragment extends Fragment implements View.OnClickListener{
             ActivityCompat.requestPermissions(getActivity(), new String[]{recordPermission}, PERMISSION_CODE);
             return false;
         }
+    }
+
+    private void openSettings() {
+        Intent settings = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getActivity().getPackageName()));
+        settings.addCategory(Intent.CATEGORY_DEFAULT);
+        settings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivityForResult(settings, REQUEST_APP_SETTINGS);
     }
 
     @Override
